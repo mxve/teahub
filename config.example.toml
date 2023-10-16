@@ -1,0 +1,11 @@
+[github]
+token = ""
+user = ""
+include_starred = true
+include_private = true
+
+[gitea]
+token = ""
+user = ""
+url = ""
+keep_private = true

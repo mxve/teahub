@@ -1,5 +1,5 @@
 use serde_derive::{Deserialize, Serialize};
-use std::path::PathBuf;
+use std::{path::PathBuf, time::Duration};
 mod config;
 
 #[allow(dead_code)]
@@ -124,7 +124,7 @@ fn mirror_repo(repo: &Repo, config: &config::Config) {
         issues: true,
         lfs: true,
         mirror: true,
-        mirror_interval: "2h".to_string(),
+        mirror_interval: config.gitea.mirror_interval.clone(),
         private: true,
         pull_requests: true,
         releases: true,
@@ -157,6 +157,7 @@ fn mirror_repo(repo: &Repo, config: &config::Config) {
         .header("Content-Length", &payload.len())
         .header("Content-Type", "application/json")
         .header("Authorization", &format!("token {}", &config.gitea.token))
+        .timeout(Some(Duration::from_secs(90))) // When mirroring many and or large repos it can take a while
         .send(&mut buffer)
     {
         Ok(req) => {
@@ -178,7 +179,9 @@ fn main() {
     let gitea_repos_names: Vec<String> = gitea_repos.iter().map(|r| r.name.clone()).collect();
     for repo in github_repos {
         let prefixed_name = format!("{}_{}", repo.owner.login, repo.name);
-        if gitea_repos_names.contains(&repo.name) || gitea_repos_names.contains(&prefixed_name) {
+        if (gitea_repos_names.contains(&repo.name) && repo.owner.login == config.github.user)
+            || gitea_repos_names.contains(&prefixed_name)
+        {
             println!("{} already exists", repo.name);
             continue;
         }

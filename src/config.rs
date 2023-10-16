@@ -7,6 +7,7 @@ pub struct CGitea {
     pub user: String,
     pub url: String,
     pub keep_private: bool,
+    pub mirror_interval: String,
 }
 
 #[derive(Deserialize, Debug)]

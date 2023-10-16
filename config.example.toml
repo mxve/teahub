@@ -9,3 +9,4 @@ token = ""
 user = ""
 url = ""
 keep_private = true
+mirror_interval = "2h"

@@ -15,7 +15,7 @@ TeaHub makes use of Gitea's mirroring feature and uses the GitHub and Gitea API 
 - Configurable (Gitea) mirror interval
 
 ## Usage
-- Setup config file (see [config.example.json](config.example.json))
+- Setup config file (see [config.example.toml](config.example.toml))
 - Run teahub
 - ???
 - Profit
